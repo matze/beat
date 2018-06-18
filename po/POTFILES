@@ -1,0 +1,5 @@
+data/org.gnome.Beat.desktop.in
+data/org.gnome.Beat.appdata.xml.in
+data/org.gnome.Beat.gschema.xml
+src/beat-window.uisrc/main.c
+src/beat-window.c

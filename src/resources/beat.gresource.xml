@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/net/bloerg/Beat">
+    <file>ui/beat-window.ui</file>
+    <file>css/beat.css</file>
+  </gresource>
+</gresources>
