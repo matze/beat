@@ -8,6 +8,27 @@
         <property name="visible">True</property>
         <property name="show-close-button">True</property>
         <property name="title">Beat</property>
+        <child>
+          <object class="GtkButton" id="play_button">
+            <property name="visible">True</property>
+            <property name="action-name">win.play</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">media-playback-start-symbolic</property>
+                <style>
+                </style>
+              </object>
+            </child>
+            <style>
+              <class name="image-button"/>
+            </style>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
       </object>
     </child>
     <child>
@@ -31,34 +52,8 @@
             <property name="visible">True</property>
             <property name="digits">0</property>
             <property name="draw-value">False</property>
-            <signal name="value-changed" handler="on_bpm_changed" object="BeatWindow"/>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-            <property name="halign">GTK_ALIGN_CENTER</property>
             <property name="margin">12</property>
-            <child>
-              <object class="GtkButton" id="play_button">
-                <property name="visible">True</property>
-                <property name="action-name">win.play</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">media-playback-start-symbolic</property>
-                    <style>
-                    </style>
-                  </object>
-                </child>
-                <style>
-                  <class name="image-button"/>
-                  <class name="suggested-action"/>
-                </style>
-              </object>
-            </child>
+            <signal name="value-changed" handler="on_bpm_changed" object="BeatWindow"/>
           </object>
         </child>
       </object>
