@@ -25,6 +25,7 @@ struct _BeatWindow
   GtkApplicationWindow  parent_instance;
 
   GtkHeaderBar  *header_bar;
+  GtkMenuButton *menu_button;
   GtkSpinButton *bpm_entry;
   GtkScale      *bpm_scale;
   GtkButton     *play_button;
@@ -114,36 +115,62 @@ play_toggled (GSimpleAction *action,
 }
 
 static void
+show_about (GSimpleAction *action,
+            GVariant *param,
+            gpointer user_data)
+{
+  static const gchar *authors[] = {
+    "Matthias Vogelgesang <matthias.vogelgesang@gmail.com>",
+    NULL
+  };
+
+  gtk_show_about_dialog (GTK_WINDOW (user_data),
+                         "program-name", "Beat",
+                         "copyright", "Copyright \xC2\xA9 The Beat authors",
+                         "license-type", GTK_LICENSE_GPL_3_0,
+                         "authors", authors,
+                         NULL);
+}
+
+static void
 beat_window_constructed (GObject *object)
 {
   BeatWindow *self;
-  g_autoptr(GtkStyleProvider) provider;
+  GMenuModel *menu;
+  g_autoptr (GtkStyleProvider) provider;
+  g_autoptr (GtkBuilder) builder;
 
   static GActionEntry entries[] = {
-    { "play",   NULL, NULL, "false", play_toggled },
+    { "play",   NULL,       NULL, "false",    play_toggled },
+    { "about",  show_about, NULL, NULL,       NULL },
   };
 
   self = BEAT_WINDOW (object);
 
-  /* set up actions */
+  /* actions */
   g_action_map_add_action_entries (G_ACTION_MAP (self), entries, G_N_ELEMENTS (entries), self);
 
-  /* set up slider and spin button */
+  /* slider and spin button */
   gtk_range_set_range (GTK_RANGE (self->bpm_scale), 1, 240);
   gtk_range_set_value (GTK_RANGE (self->bpm_scale), 120);
   gtk_spin_button_set_adjustment (self->bpm_entry, gtk_range_get_adjustment (GTK_RANGE (self->bpm_scale)));
   gtk_spin_button_set_increments (self->bpm_entry, 1, 5);
 
-  /* set up images */
+  /* images */
   gtk_button_set_image (self->play_button, self->play_image);
 
-  /* set up css */
+  /* css */
   provider = GTK_STYLE_PROVIDER (gtk_css_provider_get_default ());
   gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (provider), "/net/bloerg/Beat/css/beat.css");
   gtk_style_context_add_provider_for_screen (gtk_window_get_screen (GTK_WINDOW (self)), 
                                              provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-  /* set up canberra */
+  /* menu */
+  builder = gtk_builder_new_from_resource ("/net/bloerg/Beat/ui/beat-menu.ui");
+  menu = G_MENU_MODEL (gtk_builder_get_object (builder, "menu"));
+  gtk_menu_button_set_menu_model (self->menu_button, menu);
+
+  /* canberra */
   ca_context_create (&self->canberra);
 
   G_OBJECT_CLASS (beat_window_parent_class)->constructed (object);
@@ -174,6 +201,7 @@ beat_window_class_init (BeatWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/net/bloerg/Beat/ui/beat-window.ui");
   gtk_widget_class_bind_template_child (widget_class, BeatWindow, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, BeatWindow, menu_button);
   gtk_widget_class_bind_template_child (widget_class, BeatWindow, bpm_entry);
   gtk_widget_class_bind_template_child (widget_class, BeatWindow, bpm_scale);
   gtk_widget_class_bind_template_child (widget_class, BeatWindow, play_button);
