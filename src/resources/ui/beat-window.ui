@@ -17,8 +17,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="icon-name">media-playback-start-symbolic</property>
-                <style>
-                </style>
               </object>
             </child>
             <style>
