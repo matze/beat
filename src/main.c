@@ -24,30 +24,31 @@
 static void
 on_activate (GtkApplication *app)
 {
-	GtkWindow *window;
+  GtkWindow *window;
 
-	g_assert (GTK_IS_APPLICATION (app));
+  g_assert (GTK_IS_APPLICATION (app));
 
-	window = gtk_application_get_active_window (app);
+  window = gtk_application_get_active_window (app);
 
-	if (window == NULL)
-		window = g_object_new (BEAT_TYPE_WINDOW, "application", app, NULL);
+  if (window == NULL)
+    window = g_object_new (BEAT_TYPE_WINDOW, "application", app, NULL);
 
-	gtk_window_present (window);
+  gtk_window_present (window);
 }
+
 
 int
 main (int   argc,
       char *argv[])
 {
-	g_autoptr(GtkApplication) app = NULL;
+  g_autoptr(GtkApplication) app = NULL;
 
-	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
+  bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
 
-	app = gtk_application_new ("org.gnome.Beat", G_APPLICATION_FLAGS_NONE);
-	g_signal_connect (app, "activate", G_CALLBACK (on_activate), NULL);
+  app = gtk_application_new ("org.gnome.Beat", G_APPLICATION_FLAGS_NONE);
+  g_signal_connect (app, "activate", G_CALLBACK (on_activate), NULL);
 
-	return g_application_run (G_APPLICATION (app), argc, argv);
+  return g_application_run (G_APPLICATION (app), argc, argv);
 }
